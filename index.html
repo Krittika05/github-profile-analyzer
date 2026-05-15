@@ -73,6 +73,262 @@
     66% { transform: translate(50px, -100px); }
   }
 
+  /* Additional animated blobs */
+  body {
+    background-attachment: fixed;
+    overflow: hidden;
+  }
+
+  .animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.6;
+  }
+
+  .blob-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.3) 0%, transparent 70%);
+    top: 20%;
+    left: 10%;
+    animation: blobMove1 15s ease-in-out infinite;
+  }
+
+  .blob-2 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 70%);
+    top: 60%;
+    right: 15%;
+    animation: blobMove2 18s ease-in-out infinite;
+  }
+
+  .blob-3 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, transparent 70%);
+    bottom: 10%;
+    left: 50%;
+    animation: blobMove3 22s ease-in-out infinite;
+  }
+
+  .blob-4 {
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.25) 0%, transparent 70%);
+    top: 50%;
+    left: 70%;
+    animation: blobMove4 20s ease-in-out infinite;
+  }
+
+  @keyframes blobMove1 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(80px, -100px) rotate(180deg); }
+  }
+
+  @keyframes blobMove2 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(-100px, 80px) rotate(180deg); }
+  }
+
+  @keyframes blobMove3 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(-80px, -80px) rotate(180deg); }
+  }
+
+  @keyframes blobMove4 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(100px, 100px) rotate(180deg); }
+  }
+
+  /* Floating Code Symbols */
+  .code-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .code-symbol {
+    position: absolute;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: rgba(124, 58, 237, 0.4);
+    user-select: none;
+    text-shadow: 0 0 10px rgba(124, 58, 237, 0.6);
+    animation: fall linear infinite;
+  }
+
+  .code-symbol.blue { color: rgba(59, 130, 246, 0.4); text-shadow: 0 0 10px rgba(59, 130, 246, 0.6); }
+  .code-symbol.green { color: rgba(16, 185, 129, 0.4); text-shadow: 0 0 10px rgba(16, 185, 129, 0.6); }
+  .code-symbol.pink { color: rgba(236, 72, 153, 0.4); text-shadow: 0 0 10px rgba(236, 72, 153, 0.6); }
+
+  @keyframes fall {
+    0% {
+      transform: translateY(-100px) rotate(0deg);
+      opacity: 0;
+    }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% {
+      transform: translateY(calc(100vh + 100px)) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  /* Floating tech icons */
+  .floating-icons {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .float-icon {
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0.15;
+    animation: floatAround 25s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(124, 58, 237, 0.5));
+  }
+
+  @keyframes floatAround {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(50px, -80px) rotate(90deg); }
+    50% { transform: translate(-30px, -150px) rotate(180deg); }
+    75% { transform: translate(-80px, -50px) rotate(270deg); }
+  }
+
+  /* Animated grid lines that pulse */
+  .pulse-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(124, 58, 237, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124, 58, 237, 0.05) 1px, transparent 1px);
+    background-size: 80px 80px;
+    animation: gridPulse 4s ease-in-out infinite;
+  }
+
+  @keyframes gridPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+  }
+
+  /* Animated wave at bottom */
+  .wave-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, rgba(124, 58, 237, 0.1));
+    animation: wave 10s linear infinite;
+  }
+
+  .wave svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @keyframes wave {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Glowing orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: orbFloat 15s ease-in-out infinite;
+  }
+
+  .orb-1 {
+    width: 8px;
+    height: 8px;
+    background: var(--purple-light);
+    box-shadow: 0 0 20px var(--purple-light), 0 0 40px var(--purple);
+    top: 15%;
+    left: 20%;
+    animation-duration: 18s;
+  }
+
+  .orb-2 {
+    width: 6px;
+    height: 6px;
+    background: var(--blue-light);
+    box-shadow: 0 0 20px var(--blue-light), 0 0 40px var(--blue);
+    top: 70%;
+    right: 25%;
+    animation-duration: 20s;
+    animation-delay: -5s;
+  }
+
+  .orb-3 {
+    width: 10px;
+    height: 10px;
+    background: #ec4899;
+    box-shadow: 0 0 20px #ec4899, 0 0 40px #ec4899;
+    bottom: 30%;
+    left: 60%;
+    animation-duration: 22s;
+    animation-delay: -10s;
+  }
+
+  .orb-4 {
+    width: 5px;
+    height: 5px;
+    background: var(--green);
+    box-shadow: 0 0 20px var(--green), 0 0 40px var(--green);
+    top: 40%;
+    right: 10%;
+    animation-duration: 16s;
+    animation-delay: -3s;
+  }
+
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(80px, -100px) scale(1.5); }
+    50% { transform: translate(-50px, -200px) scale(0.8); }
+    75% { transform: translate(-100px, -80px) scale(1.2); }
+  }
+
   .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -806,6 +1062,45 @@
 </head>
 <body>
 
+<!-- Pulsing Grid Background -->
+<div class="pulse-grid"></div>
+
+<!-- Animated Gradient Blobs -->
+<div class="animated-bg">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+
+<!-- Glowing Floating Orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="orb orb-4"></div>
+
+<!-- Falling Code Symbols (Matrix Style) -->
+<div class="code-rain" id="codeRain"></div>
+
+<!-- Floating Tech Icons -->
+<div class="floating-icons">
+  <span class="float-icon" style="top: 15%; left: 5%; animation-delay: 0s;">&lt;/&gt;</span>
+  <span class="float-icon" style="top: 30%; right: 8%; animation-delay: -3s; font-size: 2.5rem;">{ }</span>
+  <span class="float-icon" style="top: 60%; left: 10%; animation-delay: -6s;">⭐</span>
+  <span class="float-icon" style="top: 80%; right: 15%; animation-delay: -9s; font-size: 1.8rem;">🔱</span>
+  <span class="float-icon" style="top: 25%; left: 50%; animation-delay: -12s; font-size: 2.2rem;">⚡</span>
+  <span class="float-icon" style="top: 55%; right: 40%; animation-delay: -15s;">#!/</span>
+  <span class="float-icon" style="bottom: 20%; left: 35%; animation-delay: -18s; font-size: 2rem;">$_</span>
+  <span class="float-icon" style="top: 45%; left: 75%; animation-delay: -21s; font-size: 2.5rem;">( )</span>
+</div>
+
+<!-- Animated Wave at Bottom -->
+<div class="wave-container">
+  <svg class="wave" viewBox="0 0 1440 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="rgba(124, 58, 237, 0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,106.7C960,117,1056,139,1152,138.7C1248,139,1344,117,1392,106.7L1440,96L1440,200L1392,200C1344,200,1248,200,1152,200C1056,200,960,200,864,200C768,200,672,200,576,200C480,200,384,200,288,200C192,200,96,200,48,200L0,200Z"></path>
+  </svg>
+</div>
+
 <header>
   <div class="container">
     <nav class="nav">
@@ -861,6 +1156,26 @@
 </footer>
 
 <script>
+  // Generate falling code symbols (Matrix style)
+  (function generateCodeRain() {
+    const symbols = ['{', '}', '<', '>', '/', '*', ';', '=', '+', '-', '|', '&', '!', '?', '$', '#', '0', '1', '[', ']', '(', ')', '@', '%'];
+    const colors = ['', 'blue', 'green', 'pink'];
+    const container = document.getElementById('codeRain');
+    if (!container) return;
+
+    const count = 30;
+    for (let i = 0; i < count; i++) {
+      const span = document.createElement('span');
+      span.className = 'code-symbol ' + colors[Math.floor(Math.random() * colors.length)];
+      span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      span.style.left = Math.random() * 100 + '%';
+      span.style.fontSize = (Math.random() * 1.5 + 0.8) + 'rem';
+      span.style.animationDuration = (Math.random() * 10 + 8) + 's';
+      span.style.animationDelay = (Math.random() * -15) + 's';
+      container.appendChild(span);
+    }
+  })();
+
   const LANG_COLORS = {
     JavaScript: '#f7df1e',
     TypeScript: '#3178c6',
