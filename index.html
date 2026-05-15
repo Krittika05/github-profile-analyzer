@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GitHub Profile Analyzer | AI-Powered Developer Insights</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #1a202c;
+    --navy-dark: #0f172a;
+    --navy-light: #2d3748;
+    --purple: #7c3aed;
+    --purple-light: #a78bfa;
+    --blue: #3b82f6;
+    --blue-light: #60a5fa;
+    --green: #10b981;
+    --pink: #ec4899;
+    --orange: #f97316;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --border: #334155;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124, 58, 237, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124, 58, 237, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Floating purple blobs */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 10%;
+    right: 10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: float 20s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(-100px, 50px); }
+    66% { transform: translate(50px, -100px); }
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    padding: 24px 0;
+    position: sticky;
+    top: 0;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 100;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+  }
+
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--purple-light) 0%, var(--blue-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    -webkit-text-fill-color: white;
+  }
+
+  .badge {
+    padding: 6px 14px;
+    background: rgba(124, 58, 237, 0.15);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    color: var(--purple-light);
+    font-weight: 600;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 80px 0 60px;
+    text-align: center;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(124, 58, 237, 0.15);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-bottom: 24px;
+    color: var(--purple-light);
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--purple-light) 0%, var(--blue-light) 50%, var(--purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 1.25rem;
+    color: var(--text-dim);
+    max-width: 640px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+  }
+
+  /* Search */
+  .search-section {
+    max-width: 600px;
+    margin: 0 auto 40px;
+  }
+
+  .search-box {
+    display: flex;
+    gap: 12px;
+    background: rgba(45, 55, 72, 0.5);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 8px;
+    transition: all 0.3s;
+  }
+
+  .search-box:focus-within {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+  }
+
+  .search-box input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 16px 20px;
+    color: var(--text);
+    font-size: 1rem;
+    font-family: inherit;
+  }
+
+  .search-box input::placeholder {
+    color: var(--text-dim);
+  }
+
+  .btn {
+    padding: 14px 28px;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+  }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .examples {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-dim);
+  }
+
+  .example-link {
+    color: var(--purple-light);
+    text-decoration: none;
+    margin: 0 6px;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .example-link:hover {
+    color: var(--blue-light);
+    text-decoration: underline;
+  }
+
+  /* Loading */
+  .loading {
+    display: none;
+    text-align: center;
+    padding: 60px 0;
+  }
+
+  .loading.active { display: block; }
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--border);
+    border-top-color: var(--purple);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .loading p {
+    color: var(--text-dim);
+    font-size: 1rem;
+  }
+
+  /* Error */
+  .error {
+    display: none;
+    padding: 20px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 12px;
+    color: #fca5a5;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .error.active { display: block; }
+
+  /* Results */
+  .results {
+    display: none;
+    padding: 40px 0 80px;
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .results.active { display: block; }
+
+  /* Profile Card */
+  .profile-card {
+    background: rgba(45, 55, 72, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px;
+    margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 32px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 4px solid;
+    border-image: linear-gradient(135deg, var(--purple), var(--blue)) 1;
+    border-image-slice: 1;
+    padding: 4px;
+    background: var(--navy);
+    position: relative;
+    z-index: 1;
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .profile-info {
+    position: relative;
+    z-index: 1;
+  }
+
+  .profile-info h2 {
+    font-size: 2rem;
+    margin-bottom: 4px;
+    font-weight: 800;
+  }
+
+  .profile-info .username {
+    color: var(--purple-light);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 12px;
+    font-size: 1rem;
+  }
+
+  .profile-info .bio {
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .profile-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 0.875rem;
+    color: var(--text-dim);
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    background: rgba(45, 55, 72, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--purple);
+    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.2);
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+
+  .stat-card[data-color="purple"] .stat-icon { background: rgba(124, 58, 237, 0.2); color: var(--purple-light); }
+  .stat-card[data-color="blue"] .stat-icon { background: rgba(59, 130, 246, 0.2); color: var(--blue-light); }
+  .stat-card[data-color="green"] .stat-icon { background: rgba(16, 185, 129, 0.2); color: var(--green); }
+  .stat-card[data-color="orange"] .stat-icon { background: rgba(249, 115, 22, 0.2); color: var(--orange); }
+
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    color: var(--text-dim);
+    font-size: 0.875rem;
+  }
+
+  /* Section */
+  .section {
+    background: rgba(45, 55, 72, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+  }
+
+  /* Quality Score */
+  .quality-score {
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .score-circle {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 20px;
+  }
+
+  .score-circle svg {
+    transform: rotate(-90deg);
+  }
+
+  .score-circle circle {
+    fill: none;
+    stroke-width: 12;
+  }
+
+  .score-bg { stroke: var(--border); }
+
+  .score-fg {
+    stroke: url(#scoreGradient);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.5s ease-out;
+  }
+
+  .score-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .score-number {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--purple-light), var(--blue-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .score-label {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  /* Languages */
+  .lang-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .lang-item {
+    display: grid;
+    grid-template-columns: 140px 1fr 60px;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .lang-name {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .lang-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .lang-bar-bg {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .lang-bar-fg {
+    height: 100%;
+    border-radius: 4px;
+    animation: growBar 1.5s ease-out;
+    transform-origin: left;
+  }
+
+  @keyframes growBar {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  .lang-count {
+    text-align: right;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+  }
+
+  /* Badges */
+  .badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .achievement-badge {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(59, 130, 246, 0.1));
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .achievement-badge:hover {
+    transform: translateY(-4px);
+    border-color: var(--purple);
+  }
+
+  .badge-icon {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+  }
+
+  .badge-title {
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-size: 1rem;
+  }
+
+  .badge-desc {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  /* Top Repos */
+  .repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .repo-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .repo-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--purple);
+    background: rgba(124, 58, 237, 0.05);
+  }
+
+  .repo-name {
+    font-weight: 700;
+    color: var(--purple-light);
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .repo-desc {
+    color: var(--text-dim);
+    font-size: 0.875rem;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    min-height: 40px;
+  }
+
+  .repo-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  .repo-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Insights */
+  .insights-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .insight-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(15, 23, 42, 0.4);
+    border-left: 3px solid var(--purple);
+    border-radius: 8px;
+  }
+
+  .insight-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .insight-content {
+    flex: 1;
+  }
+
+  .insight-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .insight-text {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .insight-item[data-type="strength"] { border-left-color: var(--green); }
+  .insight-item[data-type="growth"] { border-left-color: var(--orange); }
+  .insight-item[data-type="career"] { border-left-color: var(--blue); }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-dim);
+    font-size: 0.875rem;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+  }
+
+  footer a {
+    color: var(--purple-light);
+    text-decoration: none;
+  }
+
+  footer a:hover { text-decoration: underline; }
+
+  /* Action buttons */
+  .action-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .btn-secondary {
+    background: rgba(45, 55, 72, 0.6);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(124, 58, 237, 0.1);
+    border-color: var(--purple);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .profile-card {
+      grid-template-columns: 1fr;
+      text-align: center;
+      padding: 24px;
+    }
+    .avatar { margin: 0 auto; width: 100px; height: 100px; }
+    .profile-meta { justify-content: center; }
+    .lang-item { grid-template-columns: 100px 1fr 50px; gap: 8px; }
+    .hero { padding: 40px 0 30px; }
+    .section { padding: 24px; }
+    .search-box { flex-direction: column; padding: 12px; }
+    .search-box input { padding: 12px; }
+  }
+
+  /* Two column layout */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 768px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <nav class="nav">
+      <div class="logo">
+        <div class="logo-icon">⚡</div>
+        <span>GitAnalyzer</span>
+      </div>
+      <div class="badge">v1.0 • Live</div>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero" id="hero">
+    <div class="hero-badge">Live GitHub Data • No signup needed</div>
+    <h1>Analyze any <span class="gradient">GitHub Profile</span><br />in seconds</h1>
+    <p>Get instant insights about coding patterns, languages, top repositories, and developer strengths — powered by smart analysis algorithms.</p>
+
+    <div class="search-section">
+      <div class="search-box">
+        <input type="text" id="usernameInput" placeholder="Enter GitHub username (e.g. torvalds)" autocomplete="off" />
+        <button class="btn" id="analyzeBtn" onclick="analyzeProfile()">
+          <span>Analyze</span>
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="examples">
+      Try:
+      <span class="example-link" onclick="searchExample('torvalds')">torvalds</span>·
+      <span class="example-link" onclick="searchExample('octocat')">octocat</span>·
+      <span class="example-link" onclick="searchExample('gaearon')">gaearon</span>·
+      <span class="example-link" onclick="searchExample('sindresorhus')">sindresorhus</span>
+    </div>
+  </section>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>Fetching profile data from GitHub...</p>
+  </div>
+
+  <div class="error" id="error"></div>
+
+  <section class="results" id="results"></section>
+</main>
+
+<footer>
+  <div class="container">
+    <p>Built with vanilla HTML, CSS &amp; JavaScript · Uses <a href="https://docs.github.com/en/rest" target="_blank">GitHub REST API</a></p>
+    <p style="margin-top: 8px;">No backend · No API keys · 100% client-side</p>
+  </div>
+</footer>
+
+<script>
+  const LANG_COLORS = {
+    JavaScript: '#f7df1e',
+    TypeScript: '#3178c6',
+    Python: '#3776ab',
+    Java: '#ed8b00',
+    'C++': '#00599c',
+    C: '#a8b9cc',
+    'C#': '#239120',
+    Ruby: '#cc342d',
+    Go: '#00add8',
+    Rust: '#dea584',
+    PHP: '#777bb4',
+    Swift: '#fa7343',
+    Kotlin: '#7f52ff',
+    HTML: '#e34f26',
+    CSS: '#1572b6',
+    Vue: '#4fc08d',
+    Shell: '#89e051',
+    Dart: '#00b4ab',
+    Scala: '#dc322f',
+    R: '#276dc3',
+    Lua: '#000080',
+    Perl: '#39457e',
+    Haskell: '#5e5086',
+    Elixir: '#6e4a7e',
+    Clojure: '#5881d8'
+  };
+
+  function getLangColor(lang) {
+    return LANG_COLORS[lang] || '#94a3b8';
+  }
+
+  function searchExample(username) {
+    document.getElementById('usernameInput').value = username;
+    analyzeProfile();
+  }
+
+  document.getElementById('usernameInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') analyzeProfile();
+  });
+
+  async function analyzeProfile() {
+    const input = document.getElementById('usernameInput');
+    const username = input.value.trim();
+    const errorEl = document.getElementById('error');
+    const loadingEl = document.getElementById('loading');
+    const resultsEl = document.getElementById('results');
+    const btn = document.getElementById('analyzeBtn');
+
+    errorEl.classList.remove('active');
+    resultsEl.classList.remove('active');
+
+    if (!username) {
+      showError('Please enter a GitHub username');
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9-]+$/.test(username)) {
+      showError('Invalid GitHub username format');
+      return;
+    }
+
+    btn.disabled = true;
+    loadingEl.classList.add('active');
+
+    try {
+      const [userRes, reposRes] = await Promise.all([
+        fetch(`https://api.github.com/users/${username}`),
+        fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`)
+      ]);
+
+      if (userRes.status === 404) {
+        throw new Error(`GitHub user "${username}" not found`);
+      }
+      if (userRes.status === 403) {
+        throw new Error('GitHub API rate limit exceeded. Please try again in an hour.');
+      }
+      if (!userRes.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+
+      const profile = await userRes.json();
+      const repos = reposRes.ok ? await reposRes.json() : [];
+
+      loadingEl.classList.remove('active');
+      renderResults(profile, repos);
+      resultsEl.classList.add('active');
+      resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (err) {
+      loadingEl.classList.remove('active');
+      showError(err.message);
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function showError(message) {
+    const errorEl = document.getElementById('error');
+    errorEl.textContent = '⚠️ ' + message;
+    errorEl.classList.add('active');
+  }
+
+  function analyzeData(profile, repos) {
+    const languages = {};
+    let totalStars = 0;
+    let totalForks = 0;
+    let hasReadmeRepo = false;
+    let hasIssues = 0;
+    const ownRepos = repos.filter(r => !r.fork);
+    const forkedRepos = repos.filter(r => r.fork);
+
+    ownRepos.forEach(repo => {
+      if (repo.language) {
+        languages[repo.language] = (languages[repo.language] || 0) + 1;
+      }
+      totalStars += repo.stargazers_count || 0;
+      totalForks += repo.forks_count || 0;
+      if (repo.has_issues && repo.open_issues_count > 0) hasIssues++;
+      if (repo.name.toLowerCase() === profile.login.toLowerCase()) hasReadmeRepo = true;
+    });
+
+    const langCount = Object.keys(languages).length;
+    const accountAge = Math.floor((Date.now() - new Date(profile.created_at)) / (1000 * 60 * 60 * 24 * 365));
+
+    let score = 0;
+    if (profile.followers > 10) score += 8;
+    if (profile.followers > 50) score += 7;
+    if (profile.followers > 200) score += 10;
+    if (profile.public_repos > 5) score += 8;
+    if (profile.public_repos > 20) score += 7;
+    if (profile.public_repos > 50) score += 5;
+    if (totalStars > 10) score += 10;
+    if (totalStars > 100) score += 10;
+    if (totalStars > 1000) score += 5;
+    if (langCount >= 3) score += 8;
+    if (langCount >= 6) score += 7;
+    if (profile.bio && profile.bio.length > 15) score += 5;
+    if (profile.blog) score += 3;
+    if (profile.company) score += 2;
+    if (hasReadmeRepo) score += 5;
+
+    score = Math.min(score, 100);
+
+    return {
+      languages,
+      totalStars,
+      totalForks,
+      ownRepos,
+      forkedRepos,
+      langCount,
+      accountAge,
+      hasReadmeRepo,
+      qualityScore: score
+    };
+  }
+
+  function generateInsights(profile, analysis) {
+    const insights = { strengths: [], growth: [], career: [] };
+
+    if (analysis.langCount >= 5) {
+      insights.strengths.push({
+        icon: '🌐',
+        title: 'Polyglot Developer',
+        text: `Proficient in ${analysis.langCount} programming languages, showing strong versatility and adaptability across different tech stacks.`
+      });
+    }
+
+    if (analysis.totalStars > 50) {
+      insights.strengths.push({
+        icon: '⭐',
+        title: 'Community Impact',
+        text: `Your repositories have earned ${analysis.totalStars} stars total — your work is being noticed and used by the community.`
+      });
+    }
+
+    if (profile.public_repos > 20) {
+      insights.strengths.push({
+        icon: '📚',
+        title: 'Active Builder',
+        text: `${profile.public_repos} public repositories shows consistent activity and a strong portfolio of work.`
+      });
+    }
+
+    if (profile.followers > 50) {
+      insights.strengths.push({
+        icon: '👥',
+        title: 'Recognized Developer',
+        text: `${profile.followers} followers indicates your contributions are valued by other developers in the community.`
+      });
+    }
+
+    if (analysis.accountAge >= 3) {
+      insights.strengths.push({
+        icon: '🎯',
+        title: 'Experienced Coder',
+        text: `${analysis.accountAge}+ years on GitHub demonstrates long-term commitment to software development.`
+      });
+    }
+
+    if (!profile.bio || profile.bio.length < 15) {
+      insights.growth.push({
+        icon: '✍️',
+        title: 'Add a Compelling Bio',
+        text: 'A descriptive bio helps recruiters and collaborators understand your expertise. Highlight your specialties and current focus areas.'
+      });
+    }
+
+    if (!analysis.hasReadmeRepo) {
+      insights.growth.push({
+        icon: '📝',
+        title: 'Create Profile README',
+        text: `Build a special repository named "${profile.login}" with a README.md to showcase your skills, projects, and personality on your profile.`
+      });
+    }
+
+    if (analysis.totalStars < 10 && profile.public_repos > 5) {
+      insights.growth.push({
+        icon: '🚀',
+        title: 'Promote Your Work',
+        text: 'Your repositories could benefit from better READMEs, demos, and sharing on social platforms to gain visibility.'
+      });
+    }
+
+    if (analysis.langCount < 3) {
+      insights.growth.push({
+        icon: '🔧',
+        title: 'Diversify Skills',
+        text: 'Explore additional languages or frameworks to broaden your technical range and open more career opportunities.'
+      });
+    }
+
+    const topLang = Object.entries(analysis.languages).sort((a, b) => b[1] - a[1])[0];
+    if (topLang) {
+      const recommendations = {
+        JavaScript: 'Strong fit for Full-Stack, Frontend, and Node.js backend roles. Consider learning TypeScript and React/Next.js for modern stack roles.',
+        TypeScript: 'High-demand skill for enterprise Frontend & Full-Stack positions. Pair with React, Vue, or Angular for premium opportunities.',
+        Python: 'Excellent for Data Science, Machine Learning, Backend, and DevOps roles. Consider specializing in ML/AI or cloud infrastructure.',
+        Java: 'Strong for Enterprise, Android, and Backend engineering. Spring Boot expertise can open senior engineering roles.',
+        Go: 'Premium skill for Cloud, Backend, and Infrastructure roles. Major tech companies actively recruit Go developers.',
+        Rust: 'Cutting-edge skill for Systems Programming, Blockchain, and high-performance applications. Very competitive salaries.',
+        'C++': 'Valuable for Game Development, Embedded Systems, and High-Frequency Trading roles. Consider modern C++ standards.',
+        Ruby: 'Strong for Web Development with Rails. Consider expanding into adjacent skills like DevOps or full-stack JavaScript.'
+      };
+      insights.career.push({
+        icon: '💼',
+        title: `${topLang[0]} Specialist Path`,
+        text: recommendations[topLang[0]] || `Continue building expertise in ${topLang[0]} and consider exploring related technologies.`
+      });
+    }
+
+    if (analysis.qualityScore >= 70) {
+      insights.career.push({
+        icon: '🎖️',
+        title: 'Senior-Level Profile',
+        text: 'Your profile demonstrates the breadth and depth expected of senior engineers. Highlight your top repos in your resume and LinkedIn.'
+      });
+    } else if (analysis.qualityScore >= 40) {
+      insights.career.push({
+        icon: '📈',
+        title: 'Growing Strong',
+        text: 'Your profile shows solid foundations. Focus on completing 1-2 standout projects with clear documentation to stand out.'
+      });
+    } else {
+      insights.career.push({
+        icon: '🌱',
+        title: 'Build Your Foundation',
+        text: 'Focus on completing portfolio projects with great READMEs. Quality over quantity — 3 polished projects beat 30 unfinished ones.'
+      });
+    }
+
+    return insights;
+  }
+
+  function renderResults(profile, repos) {
+    const analysis = analyzeData(profile, repos);
+    const insights = generateInsights(profile, analysis);
+
+    const sortedLangs = Object.entries(analysis.languages)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8);
+    const maxLang = sortedLangs[0] ? sortedLangs[0][1] : 1;
+
+    const topRepos = analysis.ownRepos
+      .sort((a, b) => b.stargazers_count - a.stargazers_count)
+      .slice(0, 6);
+
+    const scoreCircumference = 2 * Math.PI * 75;
+    const scoreOffset = scoreCircumference - (analysis.qualityScore / 100) * scoreCircumference;
+
+    const html = `
+      <div class="action-buttons">
+        <button class="btn btn-secondary" onclick="newSearch()">
+          <span>←</span> <span>New Analysis</span>
+        </button>
+        <button class="btn" onclick="downloadReport()">
+          <span>📥</span> <span>Download Report</span>
+        </button>
+        <a href="${profile.html_url}" target="_blank" class="btn btn-secondary" style="text-decoration: none;">
+          <span>🔗</span> <span>View on GitHub</span>
+        </a>
+      </div>
+
+      <div class="profile-card">
+        <div class="avatar"><img src="${profile.avatar_url}" alt="${profile.login}" /></div>
+        <div class="profile-info">
+          <h2>${escapeHtml(profile.name || profile.login)}</h2>
+          <div class="username">@${profile.login}</div>
+          ${profile.bio ? `<p class="bio">${escapeHtml(profile.bio)}</p>` : ''}
+          <div class="profile-meta">
+            ${profile.location ? `<span class="meta-item">📍 ${escapeHtml(profile.location)}</span>` : ''}
+            ${profile.company ? `<span class="meta-item">🏢 ${escapeHtml(profile.company)}</span>` : ''}
+            ${profile.blog ? `<span class="meta-item">🔗 <a href="${profile.blog.startsWith('http') ? profile.blog : 'https://' + profile.blog}" target="_blank" style="color: var(--blue-light); text-decoration: none;">${escapeHtml(profile.blog)}</a></span>` : ''}
+            <span class="meta-item">📅 Joined ${new Date(profile.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card" data-color="purple">
+          <div class="stat-icon">📦</div>
+          <div class="stat-value">${profile.public_repos}</div>
+          <div class="stat-label">Public Repos</div>
+        </div>
+        <div class="stat-card" data-color="blue">
+          <div class="stat-icon">👥</div>
+          <div class="stat-value">${formatNumber(profile.followers)}</div>
+          <div class="stat-label">Followers</div>
+        </div>
+        <div class="stat-card" data-color="green">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-value">${formatNumber(analysis.totalStars)}</div>
+          <div class="stat-label">Total Stars</div>
+        </div>
+        <div class="stat-card" data-color="orange">
+          <div class="stat-icon">🔱</div>
+          <div class="stat-value">${formatNumber(analysis.totalForks)}</div>
+          <div class="stat-label">Total Forks</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="section">
+          <h3 class="section-title"><span class="icon">📊</span>Quality Score</h3>
+          <div class="quality-score">
+            <div class="score-circle">
+              <svg width="180" height="180">
+                <defs>
+                  <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#7c3aed" />
+                    <stop offset="100%" stop-color="#3b82f6" />
+                  </linearGradient>
+                </defs>
+                <circle class="score-bg" cx="90" cy="90" r="75"></circle>
+                <circle class="score-fg" cx="90" cy="90" r="75"
+                  stroke-dasharray="${scoreCircumference}"
+                  stroke-dashoffset="${scoreOffset}"></circle>
+              </svg>
+              <div class="score-text">
+                <div class="score-number">${analysis.qualityScore}</div>
+                <div class="score-label">out of 100</div>
+              </div>
+            </div>
+            <p style="color: var(--text-dim); font-size: 0.9rem;">
+              ${analysis.qualityScore >= 70 ? '🏆 Excellent profile!' : analysis.qualityScore >= 40 ? '📈 Solid foundation' : '🌱 Room to grow'}
+            </p>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3 class="section-title"><span class="icon">💻</span>Top Languages</h3>
+          ${sortedLangs.length > 0 ? `
+            <div class="lang-list">
+              ${sortedLangs.map(([lang, count]) => `
+                <div class="lang-item">
+                  <div class="lang-name">
+                    <span class="lang-dot" style="background: ${getLangColor(lang)}"></span>
+                    <span>${escapeHtml(lang)}</span>
+                  </div>
+                  <div class="lang-bar-bg">
+                    <div class="lang-bar-fg" style="width: ${(count / maxLang) * 100}%; background: ${getLangColor(lang)};"></div>
+                  </div>
+                  <div class="lang-count">${count}</div>
+                </div>
+              `).join('')}
+            </div>
+          ` : '<p style="color: var(--text-dim);">No language data available.</p>'}
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title"><span class="icon">🏆</span>Developer Badges</h3>
+        <div class="badges-grid">
+          ${generateBadges(profile, analysis).map(b => `
+            <div class="achievement-badge">
+              <div class="badge-icon">${b.icon}</div>
+              <div class="badge-title">${b.title}</div>
+              <div class="badge-desc">${b.desc}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      ${topRepos.length > 0 ? `
+      <div class="section">
+        <h3 class="section-title"><span class="icon">🔥</span>Top Repositories</h3>
+        <div class="repo-grid">
+          ${topRepos.map(repo => `
+            <a href="${repo.html_url}" target="_blank" class="repo-card">
+              <div class="repo-name">📁 ${escapeHtml(repo.name)}</div>
+              <div class="repo-desc">${escapeHtml(repo.description || 'No description provided')}</div>
+              <div class="repo-meta">
+                ${repo.language ? `<span><span class="lang-dot" style="background: ${getLangColor(repo.language)}; display: inline-block;"></span> ${escapeHtml(repo.language)}</span>` : ''}
+                <span>⭐ ${repo.stargazers_count}</span>
+                <span>🔱 ${repo.forks_count}</span>
+              </div>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+      ` : ''}
+
+      ${insights.strengths.length > 0 ? `
+      <div class="section">
+        <h3 class="section-title"><span class="icon">💪</span>Strengths</h3>
+        <div class="insights-list">
+          ${insights.strengths.map(i => `
+            <div class="insight-item" data-type="strength">
+              <div class="insight-icon">${i.icon}</div>
+              <div class="insight-content">
+                <div class="insight-title">${i.title}</div>
+                <div class="insight-text">${i.text}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      ` : ''}
+
+      ${insights.growth.length > 0 ? `
+      <div class="section">
+        <h3 class="section-title"><span class="icon">🎯</span>Areas for Growth</h3>
+        <div class="insights-list">
+          ${insights.growth.map(i => `
+            <div class="insight-item" data-type="growth">
+              <div class="insight-icon">${i.icon}</div>
+              <div class="insight-content">
+                <div class="insight-title">${i.title}</div>
+                <div class="insight-text">${i.text}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      ` : ''}
+
+      <div class="section">
+        <h3 class="section-title"><span class="icon">🚀</span>Career Recommendations</h3>
+        <div class="insights-list">
+          ${insights.career.map(i => `
+            <div class="insight-item" data-type="career">
+              <div class="insight-icon">${i.icon}</div>
+              <div class="insight-content">
+                <div class="insight-title">${i.title}</div>
+                <div class="insight-text">${i.text}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    document.getElementById('results').innerHTML = html;
+    window.lastAnalysis = { profile, analysis, insights };
+  }
+
+  function generateBadges(profile, analysis) {
+    const badges = [];
+    if (analysis.langCount >= 5) badges.push({ icon: '🌐', title: 'Polyglot', desc: `${analysis.langCount} languages` });
+    if (analysis.totalStars >= 100) badges.push({ icon: '⭐', title: 'Star Power', desc: `${analysis.totalStars}+ stars` });
+    if (analysis.totalStars >= 1000) badges.push({ icon: '🌟', title: 'Rising Star', desc: '1K+ stars earned' });
+    if (profile.followers >= 100) badges.push({ icon: '👥', title: 'Influencer', desc: `${profile.followers} followers` });
+    if (profile.public_repos >= 20) badges.push({ icon: '📚', title: 'Prolific', desc: '20+ repositories' });
+    if (profile.public_repos >= 50) badges.push({ icon: '🏗️', title: 'Builder', desc: '50+ projects' });
+    if (analysis.accountAge >= 5) badges.push({ icon: '🎯', title: 'Veteran', desc: `${analysis.accountAge}+ years` });
+    if (analysis.hasReadmeRepo) badges.push({ icon: '📝', title: 'Documented', desc: 'Profile README' });
+    if (profile.bio) badges.push({ icon: '✍️', title: 'Storyteller', desc: 'Has bio' });
+    if (profile.blog) badges.push({ icon: '🔗', title: 'Connected', desc: 'Has website' });
+    if (analysis.totalForks >= 50) badges.push({ icon: '🔱', title: 'Forked', desc: `${analysis.totalForks}+ forks` });
+    if (badges.length === 0) badges.push({ icon: '🌱', title: 'Newcomer', desc: 'Just getting started!' });
+    return badges;
+  }
+
+  function newSearch() {
+    document.getElementById('results').classList.remove('active');
+    document.getElementById('error').classList.remove('active');
+    document.getElementById('usernameInput').value = '';
+    document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('usernameInput').focus();
+  }
+
+  function downloadReport() {
+    if (!window.lastAnalysis) return;
+    const { profile, analysis, insights } = window.lastAnalysis;
+
+    const text = `
+═══════════════════════════════════════════
+   GITHUB PROFILE ANALYSIS REPORT
+═══════════════════════════════════════════
+
+👤 PROFILE
+Name: ${profile.name || profile.login}
+Username: @${profile.login}
+${profile.bio ? `Bio: ${profile.bio}` : ''}
+${profile.location ? `Location: ${profile.location}` : ''}
+${profile.company ? `Company: ${profile.company}` : ''}
+Joined: ${new Date(profile.created_at).toLocaleDateString()}
+
+📊 STATISTICS
+Public Repositories: ${profile.public_repos}
+Followers: ${profile.followers}
+Following: ${profile.following}
+Total Stars: ${analysis.totalStars}
+Total Forks: ${analysis.totalForks}
+Languages Used: ${analysis.langCount}
+Account Age: ${analysis.accountAge} years
+
+🏆 QUALITY SCORE: ${analysis.qualityScore}/100
+
+💻 TOP LANGUAGES
+${Object.entries(analysis.languages).sort((a,b) => b[1] - a[1]).slice(0, 5).map(([l, c]) => `  • ${l}: ${c} repos`).join('\n')}
+
+💪 STRENGTHS
+${insights.strengths.map(i => `  • ${i.title}: ${i.text}`).join('\n')}
+
+🎯 AREAS FOR GROWTH
+${insights.growth.map(i => `  • ${i.title}: ${i.text}`).join('\n')}
+
+🚀 CAREER RECOMMENDATIONS
+${insights.career.map(i => `  • ${i.title}: ${i.text}`).join('\n')}
+
+═══════════════════════════════════════════
+Generated by GitAnalyzer • ${new Date().toLocaleString()}
+═══════════════════════════════════════════
+`;
+
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${profile.login}_analysis.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function formatNumber(num) {
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
+    return num.toString();
+  }
+</script>
+</body>
+</html>
